@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
-// @version      1.0
+// @version      1.1
 // @description  Place single cell light in fog
 // @author       Sven Neumann <sven@svencodes.com>
 // @match        https://*.f-puzzles.com/*
