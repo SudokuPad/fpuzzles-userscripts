@@ -3,7 +3,6 @@
 // @version      1.0
 // @description  Place single cell light in fog
 // @author       Sven Neumann <sven@svencodes.com>
-// @match        http://*/*
 // @match        https://*.f-puzzles.com/*
 // @match        https://f-puzzles.com/*
 // @grant        none
@@ -66,9 +65,13 @@
 			oneCellAtATimeTools.push(name);
 			tools.push(name);
 		};
-
 		if (window.boolConstraints) {
+			let prevButtons = buttons.splice(0, buttons.length);
 			window.onload();
+			buttons.splice(0, buttons.length);
+			for (let i = 0; i < prevButtons.length; i++) {
+				buttons.push(prevButtons[i]);
+			}
 		}
 	};
 
