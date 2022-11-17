@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
-// @version      1.1
+// @version      1.2
 // @description  Place single cell light in fog
 // @author       Sven Neumann <sven@svencodes.com>
 // @match        https://*.f-puzzles.com/*
@@ -20,7 +20,6 @@
 		window.exportPuzzle = function exportPuzzle(includeCandidates) {
 			const compressed = origExportPuzzle(includeCandidates);
 			const puzzle = JSON.parse(compressor.decompressFromBase64(compressed));
-			console.log('exportPuzzle > puzzle:', puzzle);
 			if(puzzle[id]) puzzle[id] = puzzle[id].map(({cell}) => cell);
 			return compressor.compressToBase64(JSON.stringify(puzzle));
 		};
@@ -28,7 +27,6 @@
 		const origImportPuzzle = importPuzzle;
 		window.importPuzzle = function importPuzzle(string, clearHistory) {
 			const puzzle = JSON.parse(compressor.decompressFromBase64(string));
-			console.log('importPuzzle > puzzle:', puzzle);
 			if(Array.isArray(puzzle[id])) puzzle[id] = puzzle[id].map(cell => ({cell}));
 			else delete puzzle[id];
 			string = compressor.compressToBase64(JSON.stringify(puzzle));
