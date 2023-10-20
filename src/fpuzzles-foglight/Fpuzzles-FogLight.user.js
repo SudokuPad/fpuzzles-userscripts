@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
-// @version      1.3
+// @version      1.4
 // @downloadURL  https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
 // @updateURL    https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
 // @description  Place single cell light in fog (or fog entire board)
@@ -60,6 +60,7 @@
 
 		const origCategorizeTools = categorizeTools;
 		window.categorizeTools = () => {
+			console.warn('categorizeTools');
 			origCategorizeTools();
 			const {toolConstraints, perCellConstraints, oneCellAtATimeTools, tools, negativableConstraints} = window;
 			toolConstraints.push(name);
@@ -89,5 +90,5 @@
 		if(!checkGlobals.every(key => typeof key !== 'undefined')) return;
 		clearInterval(intervalId);
 		doShim();
-	}, 50);
+	}, 5);
 })();
