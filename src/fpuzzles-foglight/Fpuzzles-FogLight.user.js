@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
-// @version      1.4
+// @version      1.5
 // @downloadURL  https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
 // @updateURL    https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
 // @description  Place single cell light in fog (or fog entire board)
@@ -19,7 +19,7 @@
 	const descriptionFogLightNeg = ['Adds puzzle fog across entire puzzle (if no bulbs are placed).'];
 
 	const doShim = () => {
-		const {exportPuzzle, importPuzzle, drawConstraints, categorizeTools, compressor, buttons} = window;
+		const {exportPuzzle, importPuzzle, drawConstraints, categorizeTools, compressor} = window;
 		const origExportPuzzle = exportPuzzle;
 		window.exportPuzzle = function exportPuzzle(includeCandidates) {
 			const compressed = origExportPuzzle(includeCandidates);
@@ -60,7 +60,6 @@
 
 		const origCategorizeTools = categorizeTools;
 		window.categorizeTools = () => {
-			console.warn('categorizeTools');
 			origCategorizeTools();
 			const {toolConstraints, perCellConstraints, oneCellAtATimeTools, tools, negativableConstraints} = window;
 			toolConstraints.push(name);
@@ -81,14 +80,15 @@
 		}
 	};
 
-	const checkGlobals = [
-		'grid', 'exportPuzzle', 'importPuzzle', 'categorizeTools',
-		'drawConstraints', 'constraints', 'negativableConstraints',
-		'descriptions',
-	];
-	const intervalId = setInterval(() => {
-		if(!checkGlobals.every(key => typeof key !== 'undefined')) return;
-		clearInterval(intervalId);
+	const checkGlobals = () => ['grid', 'exportPuzzle', 'importPuzzle', 'categorizeTools', 'drawConstraints'].every(key => window[key] !== undefined);
+	if(checkGlobals()) {
 		doShim();
-	}, 5);
+	}
+	else {
+		const intervalId = setInterval(() => {
+			if(!checkGlobals()) return;
+			clearInterval(intervalId);
+			doShim();
+		}, 16);
+	}
 })();
