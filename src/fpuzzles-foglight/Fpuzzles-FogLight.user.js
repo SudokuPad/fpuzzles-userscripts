@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
 // @version      1.3
+// @downloadURL  https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
+// @updateURL    https://github.com/SudokuPad/fpuzzles-userscripts/raw/main/src/fpuzzles-foglight/Fpuzzles-FogLight.user.js
 // @description  Place single cell light in fog (or fog entire board)
 // @author       Sven Neumann <sven@svencodes.com>
 // @match        https://*.f-puzzles.com/*
