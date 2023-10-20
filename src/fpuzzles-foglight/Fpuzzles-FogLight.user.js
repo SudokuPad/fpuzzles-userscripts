@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FPuzzles-FogLight
-// @version      1.2
-// @description  Place single cell light in fog
+// @version      1.3
+// @description  Place single cell light in fog (or fog entire board)
 // @author       Sven Neumann <sven@svencodes.com>
 // @match        https://*.f-puzzles.com/*
 // @match        https://f-puzzles.com/*
@@ -13,9 +13,11 @@
 	'use strict';
 	const id = 'foglight';
 	const name = 'Fog Light';
+	const descriptionFogLight = ['Adds puzzle fog.', 'Each placed bulb represents an unfogged cell.'];
+	const descriptionFogLightNeg = ['Adds puzzle fog across entire puzzle (if no bulbs are placed).'];
 
 	const doShim = () => {
-		const {exportPuzzle, importPuzzle, drawConstraints, categorizeTools, compressor} = window;
+		const {exportPuzzle, importPuzzle, drawConstraints, categorizeTools, compressor, buttons} = window;
 		const origExportPuzzle = exportPuzzle;
 		window.exportPuzzle = function exportPuzzle(includeCandidates) {
 			const compressed = origExportPuzzle(includeCandidates);
@@ -57,11 +59,14 @@
 		const origCategorizeTools = categorizeTools;
 		window.categorizeTools = () => {
 			origCategorizeTools();
-			const {toolConstraints, perCellConstraints, oneCellAtATimeTools, tools} = window;
+			const {toolConstraints, perCellConstraints, oneCellAtATimeTools, tools, negativableConstraints} = window;
 			toolConstraints.push(name);
 			perCellConstraints.push(name);
 			oneCellAtATimeTools.push(name);
 			tools.push(name);
+			descriptions[name] = descriptionFogLight;
+			descriptions[name+'-'] = descriptionFogLightNeg;
+			negativableConstraints.push(name);
 		};
 		if (window.boolConstraints) {
 			let prevButtons = buttons.splice(0, buttons.length);
@@ -73,16 +78,14 @@
 		}
 	};
 
+	const checkGlobals = [
+		'grid', 'exportPuzzle', 'importPuzzle', 'categorizeTools',
+		'drawConstraints', 'constraints', 'negativableConstraints',
+		'descriptions',
+	];
 	const intervalId = setInterval(() => {
-		if (typeof grid === 'undefined' ||
-			typeof exportPuzzle === 'undefined' ||
-			typeof importPuzzle === 'undefined' ||
-			typeof drawConstraints === 'undefined' ||
-			typeof categorizeTools === 'undefined') {
-			return;
-		}
-
+		if(!checkGlobals.every(key => typeof key !== 'undefined')) return;
 		clearInterval(intervalId);
 		doShim();
-	}, 16);
+	}, 50);
 })();
